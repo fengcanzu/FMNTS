@@ -138,7 +138,7 @@ The variable `freq` is set automatically: `'md'` (MODIS) for years ≥ 2000, `'a
 Reads raw TIF files, applies NDVI validity masks, performs maximum-value compositing (per date for Landsat, 8-day window for reference sequences), and stores results as compressed Zarr arrays.
 
 - Landsat: grouped by acquisition date → max composite → `ltpr_lists.zarr`
-- MODIS: read directly → `mdpr_lists.zarr`
+- MODIS: read the composite data of the maximum value over 8 days → `mdpr_lists.zarr`
 - Reference sequences are composited to standard 8-day intervals aligned to 2020
 
 ### Step 2 — Harmonic Coefficient Fitting (Cell 3–4)
@@ -167,11 +167,11 @@ amp_fmsf = amp_mdpr / amp_mdre × amp_ltre
 pha_fmsf = pha_mdpr − pha_mdre + pha_ltre
 ```
 
-A pixel-level **weight map** (based on Landsat observation count and temporal regularity) blends the HANTS and FMSF coefficient sets.
+A pixel-level **weight map** (based on Landsat observation count and temporal regularity) blends the HANTS and FMSF coefficient sets.If the number of observations per year exceeds 14, use the results from HANTS; if it is less than 14, use the results from FMSF.
 
 ### Step 5 — Reconstruction & Export (Cells 7–8)
 
-Evaluates the fused harmonic model on a dense date grid and exports a multi-band GeoTIFF, one band per time step, with band descriptions set to ISO date strings.
+Export multi-band GeoTIFF based on a custom time interval.
 
 ---
 
@@ -185,9 +185,3 @@ Evaluates the fused harmonic model on a dense date grid and exports a multi-band
 
 ---
 
-## Known Issues & Notes
-
-- `base` path uses Windows-style backslashes (`\`). Change to forward slashes or `os.path.join` for Linux/macOS.
-- `base_date` is hardcoded to `2020-01-01` in harmonic fitting. This is intentional — all date offsets are computed relative to this anchor for consistency between predicted and reference years.
-- The `iffitted` parameter controls iterative outlier filtering in HANTS: values `11/12/13` trigger up to 3 iterations; value `2` skips iteration (used for sparse Landsat data where removing points is risky).
-- Temporary Zarr files (`temp_pr/`, `temp_re/`) are deleted automatically if `cleanup_temp=True`.
