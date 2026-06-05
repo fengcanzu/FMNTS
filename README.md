@@ -8,7 +8,7 @@ A Python pipeline for reconstructing dense, cloud-free NDVI time series by fusin
 
 Remote sensing NDVI time series are often incomplete due to cloud cover, especially for high-resolution Landsat data. This pipeline addresses that problem through two complementary strategies:
 
-- **HANTS** — Applied to pixels with sufficient valid Landsat observations (> 14 valid dates). Fits a 3rd-order harmonic model directly to the Landsat time series with iterative outlier filtering.
+- **HANTS** — Applied to pixels with sufficient valid Landsat observations (> 14 valid dates per year). Fits a 3rd-order harmonic model directly to the Landsat time series with iterative outlier filtering.
 - **FMSF** — Applied to data-sparse pixels. Transfers harmonic structure from a coarse-resolution reference (MODIS/AVHRR) to Landsat by computing amplitude ratios and phase differences against a multi-year reference dataset.
 
 The two results are blended spatially by a **data-quality weight map**, yielding a seamless, gap-free NDVI reconstruction at the Landsat spatial resolution.
