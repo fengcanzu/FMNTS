@@ -3,7 +3,7 @@
 A Python pipeline for reconstructing dense, cloud-free NDVI time series by fusing **Landsat** and **MODIS** (or AVHRR) imagery using harmonic analysis (HANTS) and a Frequency-domain Multi-Scale Fusion (FMSF)method.
 
 ---
-
+ 
 ## Overview
 
 Remote sensing NDVI time series are often incomplete due to cloud cover, especially for high-resolution Landsat data. This pipeline addresses that problem through two complementary strategies:
